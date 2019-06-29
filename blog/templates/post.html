@@ -1,0 +1,29 @@
+<div class="container">
+    <h1> 제목 : {{post.title}} </h1>
+    <p> 작성 날짜 : {{post.pub_date}} </p>
+    <p> 자세한 본문 : {{post.content}} </p>
+    
+
+    <a href = "{% url 'modify' post.id%}">수정하기</a>
+    <a href = "{% url 'delete' post.id %}" onclick="return confirm('정말 삭제하시겠습니까?')">삭제하기</a>
+
+
+    <hr>
+    {% for comment in post.comments.all %}
+    <div class="comment">
+        <div class="date">{{comment.comment_date}}</div>
+        <p>{{comment.comment_contents}}</p>
+        <a href = "{% url 'delete1' comment_id=comment.id post_id=post.id  %}">삭제</a>
+    </div>
+    {% empty %}
+    <p>댓글이 없습니다.</p>
+    {% endfor %}
+    <hr>
+    <form action="{% url 'comment_write' post_pk=post.pk %}" method = "POST">
+        {% csrf_token %}
+        <input type="text" name="content" placeholder="댓글을 작성해주세요.">
+        <input type = "submit" value="Write"/>
+    </form>
+
+    <a href = "{% url 'home' %}">뒤로가기</a>
+<div>
